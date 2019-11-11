@@ -310,6 +310,10 @@ window.onload=function(){
             if(r<2){
               this.changeMotion();
             }
+
+            if(this.frontEntity!==undefined){
+              this.frontEntity.x=this.x;
+            }
           }
         });
 
@@ -317,11 +321,22 @@ window.onload=function(){
         var Lamp=Class.create(Chara,{
           initialize:function(positionY){
             Chara.call(this,positionY);
+            var that=this;
+
             this.sprite.image=game.assets[LAMP];
             this.entity=new EmptyEntity(0,0,32,32);
+            // this.entity.coloring("red",0.4);
             this.addChild(this.entity);
             this.entity.ontouchstart=function(){
               this.parentNode.touchedTarget();
+              this.parentNode.parentNode.removeChild(this.parentNode.frontEntity);
+              this.parentNode.removeChild(this);
+            };
+            this.frontEntity=new EmptyEntity(0,this.y,32,32);
+            // this.frontEntity.coloring("blue",0.4);
+            this.frontEntity.ontouchstart=function(){
+              that.touchedTarget();
+              that.removeChild(that.entity);
               this.parentNode.removeChild(this);
             };
           },
@@ -375,15 +390,21 @@ window.onload=function(){
           addChara:function(num){
             var charas=[...Array(num)].map(()=>randint(40,320-16)).sort((a,b)=>a-b);
             this.lampPos=(this.lampFlag?randint(0,num-1):-1);
+            var lamp=null;
 
             charas.map((positionY,index)=>{
               if(this.lampPos==index){
-                this.addChild(new Lamp(positionY));
+                lamp=new Lamp(positionY);
+                this.addChild(lamp);
               }
               else{
                 this.addChild(new Chara(positionY));
               }
             });
+
+            if(lamp!==null){
+              this.addChild(lamp.frontEntity);
+            }
           },
           showResult:function(){
             this.arushiveBg=new EmptyEntity(200-10,0,130,48);
