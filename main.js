@@ -477,12 +477,15 @@ window.onload=function(){
             this.addChild(new GameLabel("行かないと！",30,250,16,"black"));
 
             this.entity=new EmptyEntity(0,0,320,320);
-            this.addChild(this.entity);
             this.entity.ontouchstart=function(){
               this.parentNode.parentNode.removeChild(this.parentNode);
               stageNum=1;
               scene.addChild(new TitleScene());
             };
+
+            this.tl.delay(0.5*game.fps).then(()=>{
+              this.addChild(this.entity);
+            });
           }
         });
 
@@ -519,24 +522,27 @@ window.onload=function(){
             this.addChild(new GameLabel("私を待っているんですー！",110,250,16,"black"));
 
             this.entity=new EmptyEntity(0,0,320,320);
-            this.addChild(this.entity);
             this.entity.ontouchstart=function(){
               this.parentNode.parentNode.removeChild(this.parentNode);
               stageNum=1;
               scene.addChild(new TitleScene());
             };
+
+            this.tl.delay(0.5*game.fps).then(()=>{
+              this.addChild(this.entity);
+            });
           }
         });
 
         var stageCharaNum=[
           50,60,70,80,90,100,110,120,130,140,
           100,120,140,160,180,200,220,240,260,280,
-          300,330,360,390,420,450,480,510,540,570,
+          300,330,360,390,420,450,480,510,540,570
         ];
         var stageTime=[
           10,9.5,9,8.5,8,7.5,7,6.5,6,5.5,
           7.7,7.4,7.1,6.8,6.5,6.2,5.9,5.6,5.3,5,
-          6.8,6.5,6.2,5.9,5.7,5.5,5.3,5.2,5.1,5,
+          6.8,6.5,6.2,5.9,5.7,5.5,5.3,5.2,5.1,5
         ];
         var stageNum=1;
 
