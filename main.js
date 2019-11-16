@@ -183,6 +183,8 @@ window.onload=function(){
 
             this.serifWindow=new Window(10,150,300,130);
             this.addChild(this.serifWindow);
+            this.labelGroup=new Group();
+            this.addChild(this.labelGroup);
             this.startLabel=new FlashingLabel("TOUCH",260,290,12,"white");
             this.addChild(this.startLabel);
             this.startEntity=new EmptyEntity(0,0,320,320);
@@ -204,35 +206,35 @@ window.onload=function(){
 
             var serifPosition=158;
             var ra=randint(1,5);
-            this.addChild(new GameLabel("アルシーヴ「",15,serifPosition,14,"white"));
+            this.labelGroup.addChild(new GameLabel("アルシーヴ「",15,serifPosition,14,"white"));
             if(ra==1){
-              this.addChild(new GameLabel("またランプが抜け出したのか...",100,serifPosition,14,"white"));
-              this.addChild(new GameLabel("悪いが連れ戻してきてくれない",100,serifPosition+20,14,"white"));
-              this.addChild(new GameLabel("か？」",100,serifPosition+40,14,"white"));
+              this.labelGroup.addChild(new GameLabel("またランプが抜け出したのか...",100,serifPosition,14,"white"));
+              this.labelGroup.addChild(new GameLabel("悪いが連れ戻してきてくれない",100,serifPosition+20,14,"white"));
+              this.labelGroup.addChild(new GameLabel("か？」",100,serifPosition+40,14,"white"));
               serifPosition+=60;
             }
             else if(ra==2){
-              this.addChild(new GameLabel("ランプが懲りずに抜け出したよ",100,serifPosition,14,"white"));
-              this.addChild(new GameLabel("うだ。連れ戻してきてくれると",100,serifPosition+20,14,"white"));
-              this.addChild(new GameLabel("助かる。」",100,serifPosition+40,14,"white"));
+              this.labelGroup.addChild(new GameLabel("ランプが懲りずに抜け出したよ",100,serifPosition,14,"white"));
+              this.labelGroup.addChild(new GameLabel("うだ。連れ戻してきてくれると",100,serifPosition+20,14,"white"));
+              this.labelGroup.addChild(new GameLabel("助かる。」",100,serifPosition+40,14,"white"));
               serifPosition+=60;
             }
             else if(ra==3){
-              this.addChild(new GameLabel("ランプがどこに行ったか知らな",100,serifPosition,14,"white"));
-              this.addChild(new GameLabel("いか？これから大事な話がある",100,serifPosition+20,14,"white"));
-              this.addChild(new GameLabel("のだが...」",100,serifPosition+40,14,"white"));
+              this.labelGroup.addChild(new GameLabel("ランプがどこに行ったか知らな",100,serifPosition,14,"white"));
+              this.labelGroup.addChild(new GameLabel("いか？これから大事な話がある",100,serifPosition+20,14,"white"));
+              this.labelGroup.addChild(new GameLabel("のだが...」",100,serifPosition+40,14,"white"));
               serifPosition+=60;
             }
             else if(ra==4){
-              this.addChild(new GameLabel("ジンジャーがランプを探してい",100,serifPosition,14,"white"));
-              this.addChild(new GameLabel("るのだが、どこに行ったか知ら",100,serifPosition+20,14,"white"));
-              this.addChild(new GameLabel("ないか？」",100,serifPosition+40,14,"white"));
+              this.labelGroup.addChild(new GameLabel("ジンジャーがランプを探してい",100,serifPosition,14,"white"));
+              this.labelGroup.addChild(new GameLabel("るのだが、どこに行ったか知ら",100,serifPosition+20,14,"white"));
+              this.labelGroup.addChild(new GameLabel("ないか？」",100,serifPosition+40,14,"white"));
               serifPosition+=60;
             }
             else if(ra==5){
-              this.addChild(new GameLabel("何度も何度もすまない。またラ",100,serifPosition,14,"white"));
-              this.addChild(new GameLabel("ンプをここに連れてきてくれな",100,serifPosition+20,14,"white"));
-              this.addChild(new GameLabel("いか？」",100,serifPosition+40,14,"white"));
+              this.labelGroup.addChild(new GameLabel("何度も何度もすまない。またラ",100,serifPosition,14,"white"));
+              this.labelGroup.addChild(new GameLabel("ンプをここに連れてきてくれな",100,serifPosition+20,14,"white"));
+              this.labelGroup.addChild(new GameLabel("いか？」",100,serifPosition+40,14,"white"));
               serifPosition+=60;
             }
 
@@ -241,10 +243,10 @@ window.onload=function(){
               "マッチ「全くランプには困ったものだよ。」","マッチ「これは貸しだからね。」","マッチ「すぐに見つけてきてあげるよ。」",
               "マッチ「めんどくさいなー...」"
             ];
-            this.addChild(new GameLabel(macchiSerifs[randint(0,macchiSerifs.length-1)],15,serifPosition,14,"white"));
+            this.labelGroup.addChild(new GameLabel(macchiSerifs[randint(0,macchiSerifs.length-1)],15,serifPosition,14,"white"));
             serifPosition+=20;
 
-            this.addChild(new GameLabel("アルシーヴ「"+stageTime[num-1]+"秒以内で頼む。」",15,serifPosition,14,"white"));
+            this.labelGroup.addChild(new GameLabel("アルシーヴ「"+stageTime[num-1]+"秒以内で頼む。」",15,serifPosition,14,"white"));
           }
         });
 
@@ -317,6 +319,24 @@ window.onload=function(){
           }
         });
 
+        //モブ
+        var Mob=Class.create(Chara,{
+          initialize:function(positionY){
+            Chara.call(this,positionY);
+            var that=this;
+
+            this.entity=new EmptyEntity(0,0,32,32);
+            this.addChild(this.entity);
+            this.entity.ontouchstart=function(){
+              this.parentNode.touchedTarget();
+            };
+          },
+          touchedTarget:function(){
+            console.log("tst");
+            this.parentNode.showBlock();
+          }
+        });
+
         //ランプ
         var Lamp=Class.create(Chara,{
           initialize:function(positionY){
@@ -325,7 +345,6 @@ window.onload=function(){
 
             this.sprite.image=game.assets[LAMP];
             this.entity=new EmptyEntity(0,0,32,32);
-            // this.entity.coloring("red",0.4);
             this.addChild(this.entity);
             this.entity.ontouchstart=function(){
               this.parentNode.touchedTarget();
@@ -398,13 +417,24 @@ window.onload=function(){
                 this.addChild(lamp);
               }
               else{
-                this.addChild(new Chara(positionY));
+                this.addChild(new Mob(positionY));
               }
             });
 
             if(lamp!==null){
               this.addChild(lamp.frontEntity);
             }
+
+            this.block=new EmptyEntity(0,0,320,320);
+            // this.block.coloring("red",0.6);
+            this.block.visible=false;
+            this.addChild(this.block);
+          },
+          showBlock:function(){
+            this.block.visible=true;
+            this.tl.delay(0.7*game.fps).then(()=>{
+              this.block.visible=false;
+            });
           },
           showResult:function(){
             this.arushiveBg=new EmptyEntity(200-10,0,130,48);
